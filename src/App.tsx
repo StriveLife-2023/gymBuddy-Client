@@ -5,14 +5,14 @@ import Social from "./components/social/index";
 import Notfound from "./components/notfound";
 import Planner from "./components/planner/Planner.jsx";
 import Tracker from "./components/tracker/index";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import "./App.css";
 import DMs from "./components/chat/index.tsx";
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext } from "react";
 import AuthContext from "./components/auth/context/AuthProvider.tsx";
 
 function App() {
-  const user = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   return (
     <div className="absolute bg-neutral top-0 w-full h-full p-0">
@@ -20,7 +20,7 @@ function App() {
         <a
           className="btn btn-ghost text-primary hover:bg-accent hover:text-primary text-xl"
           href="/">
-          {user?.auth?.username || "b"}
+          {auth?.username || "SL"}
         </a>
         <a
           className="btn btn-ghost text-primary hover:bg-accent hover:text-primary normal-case text-xl"
@@ -44,11 +44,13 @@ function App() {
             <Routes>
               <Route
                 path="/"
-                element={<Login />}
+                element={
+                  auth?.username ? <redirect to="/planner" /> : <Login />
+                }
               />
               <Route
                 path="/signup"
-                element={<Auth />}
+                element={auth?.username ? <redirect to="/planner" /> : <Auth />}
               />
               <Route
                 path="social"
@@ -56,7 +58,7 @@ function App() {
               />
               <Route
                 path="planner"
-                element={<Planner number={3}/>}
+                element={<Planner number={3} />}
               />
               <Route
                 path="tracker"

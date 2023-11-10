@@ -26,11 +26,15 @@ const sendMessageAndFetch = (
   setMessages: (messages: Message[]) => void
 ) => {
   axios
-    .post(endpoint, {
-      sender_id: currentUserId,
-      recipient_id: otherUserId,
-      chat: messageContent,
-    })
+    .post(
+      endpoint,
+      {
+        sender_id: currentUserId,
+        recipient_id: otherUserId,
+        chat: messageContent,
+      },
+      { withCredentials: true }
+    )
     .then((res) => {
       setMessageContent("");
     })

@@ -23,7 +23,8 @@ const Chat: React.FC<ChatProps> = (currentUserId, otherUserId) => {
   ) => {
     axios
       .get(
-        `${endpoint}?currentUserId=${currentUserId}&otherUserId=${otherUserId}`
+        `${endpoint}?currentUserId=${currentUserId}&otherUserId=${otherUserId}`,
+        { withCredentials: true }
       )
       .then((res) => {
         setMessages(res.data);

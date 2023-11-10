@@ -4,10 +4,13 @@ import AuthContext from "./context/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./SignUp";
 import Planner from "../planner/subcomponents/Planner";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("Login.tsx setAuth: ", setAuth);
   const [inputs, setInputs] = useState({});
+  const navigate = useNavigate();
 
   const handleSignupClick = () => {
     document.location.href = "/signup";
@@ -39,12 +42,28 @@ export default function Login() {
       );
       const accessToken = resp?.data?.accessToken;
       const id = resp?.data?.id;
+
+      console.log("LOGIN BEFORE CALL::::::", auth);
       setAuth({ username, accessToken, id });
+      console.log("Login successful, setting auth:", {
+        username,
+        accessToken,
+        id,
+      });
+
+      // *** TEMPORARY AUTH DEBUGGING TECH DEBT ***
+      // document.cookie = `username=${username}`;
+      // document.cookie = `password=${password}`;
+
       //setup react router to landing
       console.log(resp.headers);
-      console.log(resp.data);
-      setAuth({ username, password, accessToken, id });
+      console.log("Server response in Login.tsx:", resp.data);
+
       document.location.href = "/planner";
+      setAuth({ username, accessToken, id });
+
+      // Navigate to the planner page without a full reload
+      navigate("/planner");
     } catch (err) {
       console.error(err);
       alert(err);
